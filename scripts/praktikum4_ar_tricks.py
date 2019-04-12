@@ -16,25 +16,42 @@ MAX_Z_SPEED = 2
 
 # IMPLEMENT THESE FUNCTIONS OR COPY FROM LAST TASK
 
-# TASK 1
+#  Task 1
 
-
-def keep_distance(x, y, z, roll, pitch, yaw, twist):
-
+def keep_distance1(x, y, z, roll, pitch, yaw, twist):
+    if x < 0.5:
+        twist.linear.x = -0.1
+    if x > 0.5:
+        twist.linear.x = 0.1
     return twist
 
 # TASK 2
 
-
-def keep_center(x, y, z, roll, pitch, yaw, twist):
-
+def keep_distance(x, y, z, roll, pitch, yaw, twist):
+    if x < 0.5:
+        twist.linear.x = 0.1
+    if x > 0.5:
+        twist.linear.x = -0.1
     return twist
+
+
+
+#def keep_center(x, y, z, roll, pitch, yaw, twist):
+ #   if y < 0:
+  #      twist.linear.y = -0.1
+   # if y > 0:
+    #    twist.linear.y = 0.1
+#    return twist
+
 
 # TASK 3
 
 
 def turn_towards_ar(x, y, z, roll, pitch, yaw, twist):
-
+    if yaw < -1.5:
+        twist.angular.z = -0.5
+    if yaw > -1.5:
+        twist.angular.z = 0.5
     return twist
 
 
@@ -94,6 +111,19 @@ def ar_demo():
         yaw = euler[2]
         rospy.loginfo("RPY: %s %s %s", roll, pitch, yaw)
         # YOUR CODE HERE
+        if marker.id == 3:
+            global cmd_vel_pub
+            last_heartbeat = rospy.get_time()
+
+            #twist_msg = keep_distance(x, y, z, roll, pitch, yaw, twist_msg)
+           # twist_msg = keep_center(x, y, z, roll, pitch, yaw, twist_msg)
+            twist_msg = turn_towards_ar(x, y, z, roll, pitch, yaw, twist_msg)
+
+        elif marker.id == 2:
+            global cmd_vel_pub
+            last_heartbeat = rospy.get_time()
+
+            twist_msg = keep_distance1(x, y, z, roll, pitch, yaw, twist_msg)
 
         # YOUR CODE HERE END
         # limiting
